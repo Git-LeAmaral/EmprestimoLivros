@@ -26,6 +26,42 @@ namespace EmprestimoLivros.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult Editar(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            EmprestimosModel emprestimo = _db.EmprestimosLivros.FirstOrDefault(x => x.Id == id);
+
+            if (emprestimo == null)
+            {
+                return NotFound();
+            }
+
+            return View(emprestimo);
+        }
+
+        [HttpGet]
+        public IActionResult Excluir(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            EmprestimosModel emprestimo = _db.EmprestimosLivros.FirstOrDefault(x => x.Id == id);
+
+            if (emprestimo == null)
+            {
+                return NotFound();
+            }
+
+            return View(emprestimo);
+        }
+
         [HttpPost]
         public IActionResult Cadastrar(EmprestimosModel emprestimos)
         {
@@ -39,5 +75,34 @@ namespace EmprestimoLivros.Controllers
 
             return View();
         }
+
+        [HttpPost]
+        public IActionResult Editar(EmprestimosModel emprestimo)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.EmprestimosLivros.Update(emprestimo);
+                _db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+
+            return View(emprestimo);
+        }
+
+        [HttpPost]
+        public IActionResult Excluir(EmprestimosModel emprestimo)
+        {
+            if (emprestimo == null)
+            {
+                return NotFound();
+            }
+
+            _db.EmprestimosLivros.Remove(emprestimo);
+            _db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
     }
 }
